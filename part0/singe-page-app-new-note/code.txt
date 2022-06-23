@@ -1,0 +1,11 @@
+note over browser
+adding new note to the notes array.
+redraw the page with new list
+end note
+browser->server: HTTP POST FormData in JSON https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over server:
+check the data validation
+create new note
+end note
+server-->browser: HTML -code with update status. 
+end note
