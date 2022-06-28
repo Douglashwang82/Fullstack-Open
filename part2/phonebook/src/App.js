@@ -5,12 +5,21 @@ import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import phoneBookServices from './phonebookService';
 
+const Notification = ({message}) => {
+  if (message === '') return '';
+  return(
+    <div style={{color:"red", border:"solid",}}>{message}</div>
+  )
+}
+
+
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('');
   const [lastId, setLastId] = useState();
+  const [message, setMessage] = useState('');
 
   const handleOnChange = (e) => setNewName(e.target.value);
   const handleNumber = (e) => setNewNumber(e.target.value);
@@ -25,18 +34,20 @@ const App = () => {
     const found = persons.find((e) => e.name === newName);
 
     if (found) {
-      console.log('found target element, start update', found.id);
       if (!window.confirm(`update ${newName} with new value?`)) return;
       phoneBookServices
         .updatePhoneBook(found.id, { ...newObject, "id": found.id })
         .then(res => setPersons(
           persons.map(e => e.name !== newName ? e : { ...newObject, "id": found.id })
         ))
-        .catch(err => alert(err));
+        .catch(err => 
+          {
+            setMessage('target already been delete')
+            setPersons(persons.filter(e => e.id !== found.id));
+          });
       return
     }
 
-    console.log('adding new Object');
     phoneBookServices
       .addPhoneBook(newObject)
       .then(res => {
@@ -44,7 +55,7 @@ const App = () => {
         setLastId(lastId + 1);
       })
       .catch(err => alert(err.message));
-
+      setMessage('added new obj');
   }
 
   const handleDelete = id => {
@@ -52,8 +63,8 @@ const App = () => {
     phoneBookServices
       .deletePhoneBook(id)
       .then(res =>
-        setPersons(persons.filter(e => e.id !== id))
-      )
+        setPersons(persons.filter(e => e.id !== id)))
+        .catch(err => setMessage('has already been deleted'))
 
   }
 
@@ -77,8 +88,8 @@ const App = () => {
   return (
     <div>
 
-      <h2>Phonebook</h2>
-
+      <h2>Phonebook</h2> 
+      <Notification message={message}/>
       <Filter filter={filter} handleFilter={handleFilter} />
 
       <h3>Add a new</h3>
