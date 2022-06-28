@@ -1,9 +1,14 @@
 import React from 'react'
 
-const Persons = ({filtered}) => {
+const Persons = ({filtered, handleDelete}) => {
   return (
     <>
-    {filtered.map((e) => { return <p key={e.name}>{e.name} {e.number}</p> })}
+    {filtered.map((e) => { return ( 
+      <p key={e.name}>{e.name} {e.number}
+      <button onClick={() => handleDelete(e.id)}>delete</button>
+      </p> 
+      )
+    })}
     </>
   )
 }
