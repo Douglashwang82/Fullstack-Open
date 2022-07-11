@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const url = 'http://localhost:3001/persons';
+const url = '/api/persons';
 
 //get
 function getPhoneBook() {
     const request = axios.get(url);
-    console.log(request.then(res => res.data));
     return request.then(response => response.data);
 }
 //post
