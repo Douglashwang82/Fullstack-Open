@@ -1,6 +1,6 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blogModel')
-
+const User = require('../models/userModel')
 blogRouter.get('/', async (request, response, next) => {
     // Blog
     //     .find({})
@@ -23,13 +23,18 @@ blogRouter.post('/', async (request, response, next) => {
     //     .then(result => {
     //         response.status(201).json(result)
     //     })
+    const user = await User.findOne({});
+    const withUser = {
+        ...request.body,
+        user: user._id
+    }
     try {
-        const newBlog = new Blog(request.body)
+        const newBlog = new Blog(withUser)
         const saveBlog = await newBlog.save()
         response.status(201).json(saveBlog)
         
     } catch (exception) {
-        response.status(400).end();
+        response.status(400).send({exception})
     }
 
 })
