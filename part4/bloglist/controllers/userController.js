@@ -31,9 +31,9 @@ userRouter.post('/', async (request, response, next) => {
             message: 'invalid user input'
         })
     }
-
-
     // 
+
+
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
@@ -53,9 +53,9 @@ userRouter.post('/', async (request, response, next) => {
     }
 })
 
-userRouter.get('/', async (request, response) => {
+userRouter.get('/', async (request, response, next) => {
     try {
-        const result = await User.find({})
+        const result = await User.find({}).populate('blogs') // key name
         response.json(result);
     } catch (exception) {
         next(exception)

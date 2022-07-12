@@ -8,7 +8,7 @@ blogRouter.get('/', async (request, response, next) => {
     //             response.json(result)
     //     })
     try {
-        const result = await Blog.find({});
+        const result = await Blog.find({}).populate('user');
         response.json(result);
 
     } catch (exception) {
@@ -31,6 +31,8 @@ blogRouter.post('/', async (request, response, next) => {
     try {
         const newBlog = new Blog(withUser)
         const saveBlog = await newBlog.save()
+        user.blogs = user.blogs.concat(saveBlog._id)
+        await user.save()
         response.status(201).json(saveBlog)
         
     } catch (exception) {

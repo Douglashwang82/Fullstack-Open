@@ -4,6 +4,7 @@ const cors = require('cors')
 const mongoose = require('mongoose');
 const userController = require('./controllers/userController')
 const blogController = require('./controllers/blogController')
+const loginController = require('./controllers/loginController')
 const config = require('./utils/config')
 const loggers = require('./utils/loggers')
 const middlewares = require('./utils/middleware')
@@ -17,6 +18,7 @@ app.use(cors())
 app.use(express.json())
 app.use('/api/blogs', blogController);
 app.use('/api/user', userController)
+app.use('/api/login', loginController)
 
 app.use(middlewares.errorHandler);
 module.exports = app;
